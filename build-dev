@@ -1,0 +1,39 @@
+#!/bin/bash
+
+pushd .
+
+# let's activate the build virtual environment
+
+source /venv/build/bin/activate
+
+# First fetch wheel and build c extensions
+
+pip wheel \
+    --find-links /wheelhouse/wheels \
+    --requirement ./requirements.txt \
+    --wheel-dir=/wheelhouse/wheels
+
+# Now let's make a Dockerfile context
+# we can't symlink wheels into the 'source' directory 'docker/impact_python'
+# because are not repeatable across machines and hence not supported by Docker.
+# Instead, we just make hard copies of everything we need to build a container into a separate
+# directory ('/tmp/impact_python'), build the container, and finally, wipe the build dir.
+
+
+rm -rf /tmp/impact_python
+
+mkdir -p /tmp/impact_python
+
+cp dev-Dockerfile /tmp/impact_python/Dockerfile
+
+cp requirements.txt /tmp/impact_python/requirements.txt
+
+cp -r /wheelhouse/wheels /tmp/impact_python/.
+
+docker build -t rebase/dev-impact-python /tmp/impact_python
+
+rm -rf /tmp/impact_python
+
+deactivate
+
+popd
