@@ -17,4 +17,4 @@ WORKDIR /code
 
 EXPOSE 25000
 
-CMD ["/venv/impact/bin/python", "-m", "server"]
+CMD ["/venv/impact/bin/python", "-m", "impact-python.server"]
