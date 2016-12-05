@@ -7,8 +7,13 @@ from sys import exit
 from curio import run, tcp_server
 from curio_http import ClientSession
 
+from .log import setup
+
 
 current_process().name = 'impact-python'
+
+
+setup()
 
 
 # TODO import log.setup and call it
@@ -23,6 +28,7 @@ def quit(signal_number, stack_frame):
 
 
 async def get_downloads(package_name):
+    LOG.debug('Looking for package: '+package_name)
     if package_name in KNOWN_PACKAGES:
         return KNOWN_PACKAGES[package_name]
     async with ClientSession() as session:
@@ -47,6 +53,7 @@ async def connection_handler(client, addr):
     stream = client.as_stream()
     while True:
         args_as_JSON = await stream.readline()
+        LOG.debug('args_as_json: {}'.format(args_as_JSON))
         if not args_as_JSON:
             break
         download_count = await get_downloads(loads(args_as_JSON.decode())[1].strip())
