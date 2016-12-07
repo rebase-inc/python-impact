@@ -2,11 +2,6 @@
 RED="\033[0;31m"
 NC="\033[0m"
 
-build_images() {
-  docker-compose "${@}" build --no-cache
-  docker-compose "${@}" up -d 
-}
-
 prompt() {
   read -e -p "$1 [$2]: " var
   echo ${var:-$2}
@@ -20,4 +15,5 @@ export PYPI_SERVER_PORT=${PYPI_SERVER_PORT:-$(prompt "PyPI server scheme" "8080"
 type=${BASH_ARGV[0]:-dev}
 
 echo -e "${RED}Building ${type} environment...${NC}"
-build_images "-f" "layouts/${type}.yml" 
+docker-compose -f "layouts/${type}.yml" build --no-cache 
+docker-compose -f "layouts/${type}.yml" up -d 

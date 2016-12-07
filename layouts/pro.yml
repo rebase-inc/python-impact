@@ -2,11 +2,13 @@ version: '2'
 
 services:
   pyimpact:
-    build: ../containers/pyimpact
+    container_name: pyimpact
+    build: 
+      context: ../services/pyimpact
+      args:
+        PYPI_SERVER_HOST:
+        PYPI_SERVER_SCHEME:
+        PYPI_SERVER_PORT:
     image: pyimpact 
-
-networks:
-  build:
-    external:
-      name: composefiles_build
-
+    expose:
+      - "25000"
