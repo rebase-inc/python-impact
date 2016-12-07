@@ -3,8 +3,8 @@ RED="\033[0;31m"
 NC="\033[0m"
 
 build_images() {
-  docker-compose "${@}" build
-  docker-compose "${@}" up -d
+  docker-compose "${@}" build --no-cache
+  docker-compose "${@}" up -d 
 }
 
 prompt() {
@@ -18,7 +18,6 @@ export PYPI_SERVER_HOST=${PYPI_SERVER_HOST:-$(prompt "PyPI server host" "$DOCKER
 export PYPI_SERVER_SCHEME=${PYPI_SERVER_SCHEME:-$(prompt "PyPI server scheme" "http://")}
 export PYPI_SERVER_PORT=${PYPI_SERVER_PORT:-$(prompt "PyPI server scheme" "8080")}
 type=${BASH_ARGV[0]:-dev}
-args=${@:1:$#-1}
 
 echo -e "${RED}Building ${type} environment...${NC}"
-build_images "-f" "layouts/${type}.yml"
+build_images "-f" "layouts/${type}.yml" 

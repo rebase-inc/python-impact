@@ -12,3 +12,5 @@ services:
     image: pyimpact 
     expose:
       - "25000"
+    ports:
+      - "25000:25000"
