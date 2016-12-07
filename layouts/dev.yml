@@ -2,15 +2,8 @@ version: '2'
 
 services:
   pyimpact:
-    container_name: pyimpact
-    build: 
-      context: ../services/pyimpact
-      args:
-        PYPI_SERVER_HOST:
-        PYPI_SERVER_SCHEME:
-        PYPI_SERVER_PORT:
-    image: pyimpact 
-    expose:
-      - "25000"
+    extends:
+      file: common.yml
+      service: pyimpact
     ports:
       - "25000:25000"
