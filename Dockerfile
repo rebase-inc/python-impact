@@ -2,8 +2,8 @@ FROM alpine
 
 COPY ./requirements.txt /requirements.txt
 
-RUN apk update && \
-    apk add \
+RUN apk --quiet update && \
+    apk --quiet add \
         --no-cache \
         ca-certificates \
         python3 && \

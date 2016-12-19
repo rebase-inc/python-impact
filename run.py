@@ -1,11 +1,14 @@
-from asynctcp import AsyncTCPCallbackServer
-from curio_http import ClientSession
-from logging import getLogger
+import base64
+import logging
 
-from rsyslog import setup
+import rsyslog
+
+from curio_http import ClientSession
+from asynctcp import AsyncTCPCallbackServer
+
     
-setup()
-LOGGER = getLogger(__name__)
+rsyslog.setup()
+LOGGER = logging.getLogger(__name__)
 
 async def get_downloads(package_name):
     async with ClientSession() as session:
@@ -25,4 +28,10 @@ async def get_downloads(package_name):
         return downloads 
 
 if __name__ == '__main__':
-    AsyncTCPCallbackServer(callback = get_downloads, host = '0.0.0.0').run()
+    AsyncTCPCallbackServer(
+            callback = get_downloads, 
+            host = '0.0.0.0',
+            port = 25000,
+            encode = lambda d: d.encode('utf-8'),
+            decode = base64.b64decode
+            ).run()

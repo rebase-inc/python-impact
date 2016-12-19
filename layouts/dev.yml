@@ -1,9 +1,0 @@
-version: '2'
-
-services:
-  pyimpact:
-    extends:
-      file: common.yml
-      service: pyimpact
-    ports:
-      - "25000:25000"
