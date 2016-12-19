@@ -1,8 +1,7 @@
 import base64
 import logging
 
-import rsyslog
-
+import rsyslog 
 from curio_http import ClientSession
 from asynctcp import AsyncTCPCallbackServer
 
@@ -25,6 +24,7 @@ async def get_downloads(package_name):
         for version, variants in content['releases'].items():
             for variant in variants:
                 downloads += variant['downloads']
+        LOGGER.info('number of downloads for package {} is {}'.format(package_name, downloads))
         return downloads 
 
 if __name__ == '__main__':
@@ -32,6 +32,6 @@ if __name__ == '__main__':
             callback = get_downloads, 
             host = '0.0.0.0',
             port = 25000,
-            encode = lambda d: d.encode('utf-8'),
-            decode = base64.b64decode
+            encode = lambda d: bytes(str(d) + '\n', 'utf-8'),
+            decode = lambda d: base64.b64decode(d).decode().strip()
             ).run()
