@@ -31,7 +31,6 @@ async def get_downloads(json_request):
                 for variant in variants:
                     downloads += variant['downloads']
             data = { 'impact': downloads }
-            LOGGER.debug('Impact for module {} is {}'.format(json_request['module'], data['impact']))
         return json.dumps(data)
 
 if __name__ == '__main__':
